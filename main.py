@@ -1,7 +1,6 @@
 from fastapi import FastAPI, HTTPException, Request, UploadFile, File, Response
 from pydantic import BaseModel
 import sqlite3
-from datetime import datetime
 import random
 import uvicorn
 import csv
@@ -70,4 +69,21 @@ def raed_solders(status : bool | None = None) ->list[dict]:
     conn.close()
 
     return [row_to_dict(row) for row in rows]
+
+def create_solder(solder : Solder) -> dict:
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    INSERT INTO solders (number, first_name, last_name, gender, city, distance, status)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+""", solder.number, solder.first_name, solder.last_name, solder.gender, solder.city, solder.distance, 1 if solder.status else 0)
+    
+    row = cursor.fetchone()
+
+    conn.commit()
+    conn.close()
+
+    return row_to_dict(row)
+
 
