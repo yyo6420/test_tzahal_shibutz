@@ -21,11 +21,6 @@ class Solder(BaseModel):
     status : bool
     room_charecter : str | None
 
-class Dorm(BaseModel):
-    charecter : str
-    clear_beds : int
-    space : bool
-
 
 def init_db():
     """Initialize database and create tables if they don't exist"""
@@ -168,23 +163,44 @@ def read_dorms(space : bool | None = None) ->list[dict]:
     rows = cursor.fetchall()
     conn.close()
 
+
     return [dorms_row_to_dict(row) for row in rows]
 
-def create_dorm(dorm : Dorm) -> dict:
+def create_dorm(room_charecter : str) -> dict:
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
 
     cursor.execute("""
-    INSERT INTO solders (charecter, clear_beds, space)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
-""", dorm.charecter, dorm.clear_beds, 1 if dorm.space else 0)
+    INSERT INTO dorms (charecter, clear_beds, space)
+    VALUES (?, ?, ?)
+""", (room_charecter, 8, 1))
     
-    row = cursor.fetchone()
 
     conn.commit()
     conn.close()
 
+    row = {
+        "charecter" : room_charecter,
+        "clear_beds" : 8,
+        "space" : True
+    }
     return dorms_row_to_dict(row)
+
+def delete_dorm(dorm_charecter : int) -> bool:
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM dorms droms WHERE charecter = ?",(dorm_charecter,))
+    if not cursor.fetchone:
+        conn.close()
+        return False
+    
+    cursor.execute("DELETE FROM dorms WHERE charecter = ?", (dorm_charecter,))
+    conn.commit()
+    conn.close
+    return True
+
+# def add_solder_to_room():
 
 
 @app.get("/")
