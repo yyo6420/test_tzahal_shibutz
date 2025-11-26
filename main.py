@@ -20,7 +20,8 @@ class Solder(BaseModel):
     distance : int
     status : bool
 
-class Room(BaseModel):
+class Dorm(BaseModel):
+    charecter : str
     clear_beds : int
     space : bool
 
@@ -41,6 +42,14 @@ def init_db():
         status INT NOT NULL DEFAULT 0
         );
     """)
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS Dorms(
+    charecter TEXT NOT NULL,
+    clear_beds INT NOT NULL
+    space INT NOT NULL DEFAULT 1
+    );
+    """)    
 
     conn.commit()
     conn.close()
