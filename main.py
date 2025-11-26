@@ -44,3 +44,15 @@ def init_db():
 
     conn.commit()
     conn.close()
+
+def row_to_dict(row) -> dict:
+    return {
+        "number" : row["number"],
+        "first_name" : row["first_name"],
+        "last_name" : row["last_name"],
+        "gender" : row["gender"],
+        "city" : row["city"],
+        "distance" : row["distance"],
+        "status" : row["status"]
+    }
+
