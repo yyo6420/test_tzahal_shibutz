@@ -44,11 +44,11 @@ def init_db():
     """)
 
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS Dorms(
-    charecter TEXT NOT NULL,
-    clear_beds INT NOT NULL
-    space INT NOT NULL DEFAULT 1
-    );
+    CREATE TABLE IF NOT EXISTS dorms(
+        charecter TEXT NOT NULL,
+        clear_beds INT NOT NULL
+        space INT NOT NULL DEFAULT 1
+        );
     """)    
 
     conn.commit()
