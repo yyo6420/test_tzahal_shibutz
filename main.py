@@ -145,13 +145,6 @@ def import_from_csv(csv_content : bytes) -> dict:
     finally:
         conn.close()
 
-def dorms_row_to_dict(row) -> dict:
-    return {
-        "charecter" : row["charecter"],
-        "clear_beds" : row["clear_beds"],
-        "space" : row["space"]
-    }
-
 def read_dorms(space : bool | None = None) ->list[dict]:
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
@@ -162,9 +155,16 @@ def read_dorms(space : bool | None = None) ->list[dict]:
 
     rows = cursor.fetchall()
     conn.close()
-    
+    rows_list = []
+    for row in rows:
+        dorm_row = {
+            "charecter" : row["charecter"],
+            "clear_beds" : row["clear_beds"],
+            "space" : row["space"]
+        }
+        rows_list.append(dorm_row)
 
-    return [dorms_row_to_dict(row) for row in rows]
+    return rows_list
 read_dorms()
 def create_dorm(room_charecter : str) -> dict:
     conn = sqlite3.connect(DB_FILE)
@@ -184,7 +184,7 @@ def create_dorm(room_charecter : str) -> dict:
         "clear_beds" : 8,
         "space" : True
     }
-    return dorms_row_to_dict(row)
+    return row
 
 def delete_dorm(dorm_charecter : int) -> bool:
     conn = sqlite3.connect(DB_FILE)
