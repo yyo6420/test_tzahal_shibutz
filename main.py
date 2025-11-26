@@ -23,7 +23,6 @@ class Solder(BaseModel):
 
 
 def init_db():
-    """Initialize database and create tables if they don't exist"""
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
     
@@ -200,12 +199,27 @@ def delete_dorm(dorm_charecter : int) -> bool:
     conn.close
     return True
 
-# def add_solder_to_room():
+def add_solder_to_room() -> dict | None:
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
 
+    cursor.execute("SELECT * FROM dorms WHERE space = ?", (1,))
+    if not cursor.fetchall():
+        return None
+    
+    row = cursor.fetchone()
+    row["clear_beds"] -= 1
+    
+    dorm_row = {
+    "charecter" : row["charecter"],
+    "clear_beds" : row["clear_beds"],
+    "space" : row["space"]
+    }
+    return dorm_row
 
 @app.get("/")
 def read_root():
-    return {"massage" : "Welcome to base shivat hasibolim"}
+    return {"massage" : "Welcome to base shivat hashibolim"}
 
 @app.get("/solders", response_model = list[Solder])
 def get_all_solders():
