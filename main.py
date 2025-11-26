@@ -191,5 +191,11 @@ def create_dorm(dorm : Dorm) -> dict:
 def read_root():
     return {"massage" : "Welcome to base shivat hasibolim"}
 
+@app.get("/solders", response_model = list[Solder])
+def get_all_solders():
+    solders = raed_solders()
+    return solders
+
+
 # if __name__ == "__main__":
     # uvicorn.run(app, host="0.0.0.0", port=8001) 
