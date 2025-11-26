@@ -86,7 +86,7 @@ def create_solder(solder : Solder) -> dict:
 
     return row_to_dict(row)
 
-def import_csv(csv_content : bytes) -> dict:
+def import_from_csv(csv_content : bytes) -> dict:
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
 
