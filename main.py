@@ -143,5 +143,18 @@ def droms_row_to_dict(row) -> dict:
         "space" : row["space"]
     }
 
+def raed_droms(space : bool | None = None) ->list[dict]:
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+    if space is not None:
+        cursor.execute("SELECT * FROM droms WHERE space = ?", (1 if space else 0,))
+    else:
+        cursor.execute("SELECT * FROM droms")
+
+    rows = cursor.fetchall()
+    conn.close()
+
+    return [droms_row_to_dict(row) for row in rows]
+
 # if __name__ == "__main__":
     # uvicorn.run(app, host="0.0.0.0", port=8001)
