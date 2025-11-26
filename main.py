@@ -67,7 +67,7 @@ def solders_row_to_dict(row) -> dict:
         "status" : row["status"]
     }
 
-def raed_solders(status : bool | None = None) ->list[dict]:
+def read_solders(status : bool | None = None) ->list[dict]:
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
     if status is not None:
@@ -157,7 +157,7 @@ def dorms_row_to_dict(row) -> dict:
         "space" : row["space"]
     }
 
-def raed_dorms(space : bool | None = None) ->list[dict]:
+def read_dorms(space : bool | None = None) ->list[dict]:
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
     if space is not None:
@@ -193,9 +193,13 @@ def read_root():
 
 @app.get("/solders", response_model = list[Solder])
 def get_all_solders():
-    solders = raed_solders()
+    solders = read_solders()
     return solders
 
+@app.get("/solders/{status}")
+def get_solders_by_status(solders_status):
+    solders = read_solders(status = solders_status)
+    return solders
 
 # if __name__ == "__main__":
-    # uvicorn.run(app, host="0.0.0.0", port=8001) 
+    # uvicorn.run(app, host="0.0.0.0", port=8000) 
