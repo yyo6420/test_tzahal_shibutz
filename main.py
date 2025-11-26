@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException, Request, UploadFile, File, Response
 from pydantic import BaseModel
 import sqlite3
 from datetime import datetime
+import random
 import uvicorn
 import csv
 import io
@@ -9,6 +10,7 @@ import io
 app = FastAPI(title = "shibutz haylim", version = "1.0.0")
 
 DB_FILE = "hayal_300_no_status.sqlite"
+CSV_FILE = "hayal_300_no_status.csv"
 
 class Solder(BaseModel):
     number : int
@@ -55,4 +57,17 @@ def row_to_dict(row) -> dict:
         "distance" : row["distance"],
         "status" : row["status"]
     }
+
+def raed_solders(status : bool | None = None) ->list[dict]:
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+    if status is not None:
+        cursor.execute("SELECT * FROM solders WHERE status = ?", (1 if status else 0,))
+    else:
+        cursor.execute("SELECT * FROM solders")
+    
+    rows = cursor.fetchall()
+    conn.close()
+
+    return [row_to_dict(row) for row in rows]
 
