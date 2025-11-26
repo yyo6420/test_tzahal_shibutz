@@ -19,7 +19,7 @@ class Solder(BaseModel):
     city : str
     distance : int
     status : bool
-    room_charecter : str | None
+    dorm_charecter : str | None
 
 
 def init_db():
@@ -35,7 +35,7 @@ def init_db():
         city TEXT NOT NULL,
         distance INT NOT NULL,
         status INT NOT NULL DEFAULT 0,
-        room_charecter TEXT DEFAULT NULL
+        dorm_charecter TEXT DEFAULT NULL
         );
     """)
 
@@ -165,21 +165,21 @@ def read_dorms(space : bool | None = None) ->list[dict]:
 
     return rows_list
 read_dorms()
-def create_dorm(room_charecter : str) -> dict:
+def create_dorm(dorm_charecter : str) -> dict:
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
 
     cursor.execute("""
     INSERT INTO dorms (charecter, clear_beds, space)
     VALUES (?, ?, ?)
-""", (room_charecter, 8, 1))
+""", (dorm_charecter, 8, 1))
     
 
     conn.commit()
     conn.close()
 
     row = {
-        "charecter" : room_charecter,
+        "charecter" : dorm_charecter,
         "clear_beds" : 8,
         "space" : True
     }
@@ -199,7 +199,7 @@ def delete_dorm(dorm_charecter : int) -> bool:
     conn.close
     return True
 
-def add_solder_to_room() -> dict | None:
+def add_solder_to_dorm() -> dict | None:
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
 
