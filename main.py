@@ -231,5 +231,9 @@ def get_solders_by_status(solders_status):
     solders = read_solders(status = solders_status)
     return solders
 
-# if __name__ == "__main__":
-    # uvicorn.run(app, host="0.0.0.0", port=8000) 
+@app.post("/solders/post")
+def import_solders_from_csv():
+    return import_from_csv(DB_FILE)
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000) 
