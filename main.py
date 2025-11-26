@@ -93,8 +93,22 @@ def create_solder(solder : Solder) -> dict:
 
     conn.commit()
     conn.close()
-
+  
     return solders_row_to_dict(row)
+
+def delete_solder(solder_number : int) -> bool:
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM solders WHERE number = ?",(solder_number,))
+    if not cursor.fetchone:
+        conn.close()
+        return False
+    
+    cursor.execute("DELETE FROM solders WHERE id = ?", (solder_number,))
+    conn.commit()
+    conn.close
+    return True
 
 def import_from_csv(csv_content : bytes) -> dict:
     conn = sqlite3.connect(DB_FILE)
@@ -170,7 +184,10 @@ def create_dorm(dorm : Dorm) -> dict:
     conn.commit()
     conn.close()
 
-    return dorms_row_to_dict(row)    
+    return dorms_row_to_dict(row)
+
+
+# @app.get("/")
 
 # if __name__ == "__main__":
     # uvicorn.run(app, host="0.0.0.0", port=8001) 
