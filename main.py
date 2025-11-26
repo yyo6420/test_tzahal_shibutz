@@ -41,5 +41,3 @@ def init_db():
         status INT NOT NULL DEFAULT 0
         );
     """)
-
-init_db()
