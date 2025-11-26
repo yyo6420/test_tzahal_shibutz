@@ -235,5 +235,13 @@ def get_solders_by_status(solders_status):
 def import_solders_from_csv():
     return import_from_csv(DB_FILE)
 
+@app.post("/solders/add_solder")
+def add_solder_to_clear_dorm():
+    if add_solder_to_dorm():
+        return add_solder_to_dorm()
+    else:
+        sorry = "sorry, there is no clear dorms, this solder transpering to wait list"
+        return sorry
+    
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000) 
