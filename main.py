@@ -56,9 +56,7 @@ def init_db():
     conn.commit()
     conn.close()
 
-init_db()
-
-def row_to_dict(row) -> dict:
+def solders_row_to_dict(row) -> dict:
     return {
         "number" : row["number"],
         "first_name" : row["first_name"],
@@ -80,7 +78,7 @@ def raed_solders(status : bool | None = None) ->list[dict]:
     rows = cursor.fetchall()
     conn.close()
 
-    return [row_to_dict(row) for row in rows]
+    return [solders_row_to_dict(row) for row in rows]
 
 def create_solder(solder : Solder) -> dict:
     conn = sqlite3.connect(DB_FILE)
@@ -96,7 +94,7 @@ def create_solder(solder : Solder) -> dict:
     conn.commit()
     conn.close()
 
-    return row_to_dict(row)
+    return solders_row_to_dict(row)
 
 def import_from_csv(csv_content : bytes) -> dict:
     conn = sqlite3.connect(DB_FILE)
@@ -138,7 +136,12 @@ def import_from_csv(csv_content : bytes) -> dict:
     finally:
         conn.close()
 
-
+def droms_row_to_dict(row) -> dict:
+    return {
+        "charecter" : row["charecter"],
+        "clear_beds" : row["clear_beds"],
+        "space" : row["space"]
+    }
 
 # if __name__ == "__main__":
     # uvicorn.run(app, host="0.0.0.0", port=8001)
