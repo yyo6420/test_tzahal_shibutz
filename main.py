@@ -242,6 +242,12 @@ def add_solder_to_clear_dorm():
     else:
         sorry = "sorry, there is no clear dorms, this solder transpering to wait list"
         return sorry
+
+@app.get("/dorms")
+def get_all_dorms():
+    dorms = read_dorms()
+    return dorms
+
     
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000) 
