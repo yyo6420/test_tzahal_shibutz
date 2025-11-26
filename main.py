@@ -8,7 +8,7 @@ import io
 
 app = FastAPI(title = "shibutz haylim", version = "1.0.0")
 
-DB_FILE = "hayal_300_no_status.sqlite"
+DB_FILE = "the_base.sqlite"
 CSV_FILE = "hayal_300_no_status.csv"
 
 class Solder(BaseModel):
@@ -136,25 +136,41 @@ def import_from_csv(csv_content : bytes) -> dict:
     finally:
         conn.close()
 
-def droms_row_to_dict(row) -> dict:
+def dorms_row_to_dict(row) -> dict:
     return {
         "charecter" : row["charecter"],
         "clear_beds" : row["clear_beds"],
         "space" : row["space"]
     }
 
-def raed_droms(space : bool | None = None) ->list[dict]:
+def raed_dorms(space : bool | None = None) ->list[dict]:
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
     if space is not None:
-        cursor.execute("SELECT * FROM droms WHERE space = ?", (1 if space else 0,))
+        cursor.execute("SELECT * FROM dorms WHERE space = ?", (1 if space else 0,))
     else:
-        cursor.execute("SELECT * FROM droms")
+        cursor.execute("SELECT * FROM dorms")
 
     rows = cursor.fetchall()
     conn.close()
 
-    return [droms_row_to_dict(row) for row in rows]
+    return [dorms_row_to_dict(row) for row in rows]
+
+def create_dorm(dorm : Dorm) -> dict:
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    INSERT INTO solders (charecter, clear_beds, space)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+""", dorm.charecter, dorm.clear_beds, 1 if dorm.space else 0)
+    
+    row = cursor.fetchone()
+
+    conn.commit()
+    conn.close()
+
+    return dorms_row_to_dict(row)    
 
 # if __name__ == "__main__":
-    # uvicorn.run(app, host="0.0.0.0", port=8001)
+    # uvicorn.run(app, host="0.0.0.0", port=8001) 
