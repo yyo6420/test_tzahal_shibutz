@@ -40,7 +40,7 @@ def init_db():
         gender TEXT NOT NULL,
         city TEXT NOT NULL,
         distance INT NOT NULL,
-        status INT NOT NULL DEFAULT 0
+        status INT NOT NULL DEFAULT 0,
         room_charecter TEXT DEFAULT NULL
         );
     """)
@@ -48,13 +48,15 @@ def init_db():
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS dorms(
         charecter TEXT NOT NULL,
-        clear_beds INT NOT NULL
+        clear_beds INT NOT NULL,
         space INT NOT NULL DEFAULT 1
         );
     """)    
 
     conn.commit()
     conn.close()
+
+init_db()
 
 def row_to_dict(row) -> dict:
     return {
@@ -138,5 +140,5 @@ def import_from_csv(csv_content : bytes) -> dict:
 
 
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8001)
+# if __name__ == "__main__":
+    # uvicorn.run(app, host="0.0.0.0", port=8001)
