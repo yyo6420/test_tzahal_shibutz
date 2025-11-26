@@ -162,10 +162,10 @@ def read_dorms(space : bool | None = None) ->list[dict]:
 
     rows = cursor.fetchall()
     conn.close()
-
+    
 
     return [dorms_row_to_dict(row) for row in rows]
-
+read_dorms()
 def create_dorm(room_charecter : str) -> dict:
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
