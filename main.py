@@ -22,9 +22,8 @@ class Solder(BaseModel):
 
 class Room(BaseModel):
     clear_beds : int
+    space : bool
 
-class Dorm(BaseModel):
-    room_with_clear_beds : int
 
 def init_db():
     """Initialize database and create tables if they don't exist"""
@@ -125,6 +124,7 @@ def import_from_csv(csv_content : bytes) -> dict:
         raise HTTPException(status_code=400, detail=f"Error importing CSV: {str(error)}")
     finally:
         conn.close()
+
 
 
 if __name__ == "__main__":
