@@ -19,6 +19,7 @@ class Solder(BaseModel):
     city : str
     distance : int
     status : bool
+    room_charecter : str | None
 
 class Dorm(BaseModel):
     charecter : str
@@ -40,6 +41,7 @@ def init_db():
         city TEXT NOT NULL,
         distance INT NOT NULL,
         status INT NOT NULL DEFAULT 0
+        room_charecter TEXT DEFAULT NULL
         );
     """)
 
