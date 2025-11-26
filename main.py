@@ -86,4 +86,46 @@ def create_solder(solder : Solder) -> dict:
 
     return row_to_dict(row)
 
+def import_csv(csv_content : bytes) -> dict:
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
 
+    try:
+        csv_text = csv_content.decode("utf-8")
+        csv_raeder = csv.DictReader(io.StringIO(csv_text))
+    
+        import_count = 0
+
+        for row in csv_raeder:
+            number = row.get("number")
+            if number[0] != 8:
+                continue
+
+            first_name = row.get("first_name")
+            last_name = row.get("last_name")
+            gender = row.get("gender")
+            city = row.get("city")
+            distance = row.get("distance")
+            status = 1 if row.get("status") else 0
+
+            cursor.execute("""
+                INSERT INTO solders (number, first_name, last_name, gender, city, distance, status)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            """, (number, first_name, last_name, gender, city, distance, status))
+            import_count += 1
+        
+        conn.commit()
+
+        return {
+            "message": f"Successfully imported {import_count} solders from CSV",
+        }
+
+    except Exception as error:
+        conn.rollback()
+        raise HTTPException(status_code=400, detail=f"Error importing CSV: {str(error)}")
+    finally:
+        conn.close()
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8001)
