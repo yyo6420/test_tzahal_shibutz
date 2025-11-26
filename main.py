@@ -187,7 +187,9 @@ def create_dorm(dorm : Dorm) -> dict:
     return dorms_row_to_dict(row)
 
 
-# @app.get("/")
+@app.get("/")
+def read_root():
+    return {"massage" : "Welcome to base shivat hasibolim"}
 
 # if __name__ == "__main__":
     # uvicorn.run(app, host="0.0.0.0", port=8001) 
